@@ -8,7 +8,7 @@ namespace AoC2018
         [STAThread]
         static void Main(string[] args)
         {
-            string result = new Day1().CalcB();
+            string result = new Day2().CalcB();
 
             Clipboard.SetText(result);
             Console.WriteLine(result);
