@@ -13,7 +13,7 @@ namespace AoC2018
 
             foreach (var row in _data.Split(new []{'\r','\n'}, StringSplitOptions.RemoveEmptyEntries))
             {
-                var lookup = row.ToCharArray().ToLookup(key => key);
+                var lookup = row.ToLookup(key => key);
                 if (lookup.Any(l => l.Count() == 2))
                     num2++;
                 if (lookup.Any(l => l.Count() == 3))
