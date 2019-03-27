@@ -16,15 +16,16 @@ namespace AoC2018
         private static int CalcS(List<char> data)
         {
             bool hasChanged;
+            List<char> upper = data.Select(char.ToUpper).ToList();
             do
             {
                 hasChanged = false;
                 for (int i = 1; i < data.Count; i++)
-                    if (data[i] != data[i - 1] && char.ToUpper(data[i]) == char.ToUpper(data[i - 1]))
+                    if (data[i] != data[i - 1] && upper[i] == upper[i - 1])
                     {
                         hasChanged = true;
-                        data.RemoveAt(i - 1);
-                        data.RemoveAt(i - 1);
+                        data.RemoveRange(i - 1, 2);
+                        upper.RemoveRange(i - 1, 2);
                     }
             } while (hasChanged);
 
