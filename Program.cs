@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
 
 namespace AoC2018
@@ -9,7 +8,7 @@ namespace AoC2018
         [STAThread]
         static void Main()
         {
-            string result = new Day5().CalcB();
+            string result = new Day10().CalcA();
 
             Clipboard.SetText(result);
             Console.WriteLine(result);
