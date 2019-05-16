@@ -9,7 +9,7 @@ namespace AoC2018
         static void Main()
         {
             DateTime start = DateTime.Now;
-            string result = new Day11().CalcA();
+            string result = new Day13().CalcA();
             DateTime stop = DateTime.Now;
 
             Console.WriteLine("It took " + (stop - start).TotalSeconds);
