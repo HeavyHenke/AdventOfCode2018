@@ -55,6 +55,8 @@
     <Compile Include="Day10.cs" />
     <Compile Include="Day11.cs" />
     <Compile Include="Day12.cs" />
+    <Compile Include="Day13.cs" />
+    <Compile Include="Day14.cs" />
     <Compile Include="Day2.cs" />
     <Compile Include="Day25.cs" />
     <Compile Include="Day3.cs" />
@@ -69,6 +71,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Day10.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Day13Test2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Day13Test.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Day13.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Day12.txt">
