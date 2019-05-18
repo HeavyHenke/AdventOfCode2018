@@ -7,7 +7,7 @@ namespace AoC2018
 {
     public class Day15
     {
-        private readonly HashSet<(int x, int y)> _walls = new HashSet<(int x, int y)>();
+        private bool[,] _walls;
         private readonly Dictionary<(int x, int y), int> _goblins = new Dictionary<(int x, int y), int>();
         private readonly Dictionary<(int x, int y), int> _elves = new Dictionary<(int x, int y), int>();
         private int _maxX;
@@ -20,13 +20,14 @@ namespace AoC2018
             _maxX = lines.Length;
             _maxY = lines[0].Length;
 
+            _walls = new bool[lines[0].Length, lines.Length];
             for (int y = 0; y < lines.Length; y++)
             for (int x = 0; x < lines[y].Length; x++)
             {
                 switch (lines[y][x])
                 {
                     case '#':
-                        _walls.Add((x, y));
+                        _walls[x, y] = true;
                         break;
                     case 'G':
                         _goblins.Add((x, y), 200);
@@ -66,13 +67,13 @@ namespace AoC2018
 
             while (true)
             {
-                _walls.Clear();
                 _goblins.Clear();
                 _elves.Clear();
 
                 var lines = File.ReadAllLines("Day15.txt");
                 _maxX = lines.Length;
                 _maxY = lines[0].Length;
+                _walls = new bool[lines[0].Length, lines.Length];
 
                 for (int y = 0; y < lines.Length; y++)
                 for (int x = 0; x < lines[y].Length; x++)
@@ -80,7 +81,7 @@ namespace AoC2018
                     switch (lines[y][x])
                     {
                         case '#':
-                            _walls.Add((x, y));
+                            _walls[x, y] = true;
                             break;
                         case 'G':
                             _goblins.Add((x, y), 200);
@@ -196,7 +197,6 @@ namespace AoC2018
                 distances[pos.x, pos.y] = 1;
             }
 
-
             while (searchQueue.Count > 0)
             {
                 var node = searchQueue.Dequeue();
@@ -250,14 +250,14 @@ namespace AoC2018
             if (pos.y < 0 || pos.y >= _maxY)
                 return false;
 
-            if (_walls.Contains(pos)) return false;
+            if (_walls[pos.x, pos.y]) return false;
             if (_goblins.ContainsKey(pos)) return false;
             if (_elves.ContainsKey(pos)) return false;
             return true;
         }
 
 
-        private void Print(int maxX, int maxY, HashSet<(int x, int y)> walls, Dictionary<(int x, int y), int> goblins, Dictionary<(int x, int y), int> elves, int turn)
+        private void Print(int maxX, int maxY, bool [,] walls, Dictionary<(int x, int y), int> goblins, Dictionary<(int x, int y), int> elves, int turn)
         {
             Console.WriteLine("Turn " + turn);
             for (int y = 0; y < maxY; y++)
@@ -275,7 +275,7 @@ namespace AoC2018
                         Console.Write('E');
                         extraInfo.Add($"E({elves[(x, y)]})");
                     }
-                    else if (walls.Contains((x, y)))
+                    else if (walls[x,y])
                     {
                         Console.Write('#');
                     }
