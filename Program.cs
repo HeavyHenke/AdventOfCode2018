@@ -9,21 +9,13 @@ namespace AoC2018
         static void Main()
         {
             DateTime start = DateTime.Now;
-            string result = new Day15().CalcA();
+            string result = new Day15().CalcB();
             DateTime stop = DateTime.Now;
 
             Console.WriteLine("It took " + (stop - start).TotalSeconds);
 
             Clipboard.SetText(result);
             Console.WriteLine(result);
-        }
-    }
-
-    public class Day15
-    {
-        public string CalcA()
-        {
-            return "";
         }
     }
 }
