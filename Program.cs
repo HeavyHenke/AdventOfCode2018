@@ -9,7 +9,7 @@ namespace AoC2018
         static void Main()
         {
             DateTime start = DateTime.Now;
-            string result = new Day16().CalcA();
+            string result = new Day17().CalcA();
             DateTime stop = DateTime.Now;
 
             Console.WriteLine("It took " + (stop - start).TotalSeconds);
@@ -19,7 +19,7 @@ namespace AoC2018
         }
     }
 
-    public class Day16
+    public class Day17
     {
         public string CalcA()
         {
