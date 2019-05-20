@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using MoreLinq;
 
 namespace AoC2018
 {
@@ -28,7 +30,7 @@ namespace AoC2018
         {
             var clay = new HashSet<(int x, int y)>();
 
-            foreach (var line in File.ReadAllLines("Day17Test.txt"))
+            foreach (var line in File.ReadAllLines("Day17.txt"))
             {
                 var m = Regex.Match(line, @"x=(\d+), y=(\d+)..(\d+)");
                 if (m.Success)
@@ -66,15 +68,13 @@ namespace AoC2018
                 minY = Math.Min(minY, pos.y);
             }
 
-
-            minY = 0;
-            Console.SetBufferSize(Math.Max(maxX - minX + 1, Console.BufferWidth) , Math.Max(maxY - minY + 1, Console.BufferHeight));
+            Console.SetBufferSize(Math.Max(maxX - minX + 1, Console.BufferWidth), Math.Max(maxY - minY + 1, Console.BufferHeight));
 
             var stillWater = new HashSet<(int x, int y)>();
             var springWater = new HashSet<(int x, int y)>();
 
             var springQueue = new Queue<(int x, int y)>();
-            springQueue.Enqueue((500, 0));
+            springQueue.Enqueue((499, 0));
             while (springQueue.Count > 0)
             {
                 var node = springQueue.Dequeue();
@@ -85,7 +85,7 @@ namespace AoC2018
                 bool foundCollition = false;
                 for (y = node.y + 1; clay.Contains((node.x, y)) == false && stillWater.Contains((node.x, y)) == false && y <= maxY; y++)
                 {
-                    if (springWater.Add((node.x, y)) == false)
+                    if (y >= minY && springWater.Add((node.x, y)) == false)
                     {
                         foundCollition = true;
                         break;
@@ -100,44 +100,45 @@ namespace AoC2018
                     continue;
 
                 // Find border
-                int leftBorder = minX - 1;
+                int leftBorder = int.MinValue;
                 int leftFloor = node.x;
-                bool floorEnded = false;
-                for (int x = node.x - 1; x >= minX; x--)
+                bool done = false;
+                for (int x = node.x; !done; x--)
                 {
-                    if (!floorEnded && (clay.Contains((x, y + 1)) || stillWater.Contains((x, y + 1))))
+                    if (clay.Contains((x, y)))
+                    {
+                        leftBorder = x;
+                        done = true;
+                    }
+
+                    if (clay.Contains((x, y + 1)) || stillWater.Contains((x, y + 1)))
                     {
                         leftFloor = x;
                     }
                     else
                     {
-                        floorEnded = true;
-                    }
-
-                    if (clay.Contains((x, y)))
-                    {
-                        leftBorder = x;
-                        break;
+                        done = true;
                     }
                 }
 
-                int rightBorder = maxX + 2;
+                int rightBorder = int.MaxValue;
                 int rightFloor = node.x;
-                floorEnded = false;
-                for (int x = node.x + 1; x <= maxX; x++)
+                done = false;
+                for (int x = node.x; !done; x++)
                 {
-                    if (!floorEnded && (clay.Contains((x, y + 1)) || stillWater.Contains((x, y + 1))))
+                    if (clay.Contains((x, y)))
+                    {
+                        rightBorder = x;
+                        done = true;
+                    }
+
+                    if (clay.Contains((x, y + 1)) || stillWater.Contains((x, y + 1)))
                     {
                         rightFloor = x;
                     }
                     else
                     {
-                        floorEnded = true;
-                    }
-                    if (clay.Contains((x, y)))
-                    {
-                        rightBorder = x;
-                        break;
+                        done = true;
                     }
                 }
 
@@ -156,56 +157,62 @@ namespace AoC2018
                     for (int x = node.x; x > leftBorder; x--)
                     {
                         springWater.Add((x, y));
-                        if (x >= leftFloor)
+                        if (x < leftFloor)
                         {
-                            continue;
+                            springQueue.Enqueue((x, y));
+                            break;
                         }
-
-                        springQueue.Enqueue((x, y));
-                        break;
                     }
 
                     for (int x = node.x; x < rightBorder; x++)
                     {
                         springWater.Add((x, y));
-                        if (x <= rightFloor)
+                        if (x > rightFloor)
                         {
-                            continue;
+                            springQueue.Enqueue((x, y));
+                            break;
                         }
-
-                        springQueue.Enqueue((x, y));
-                        break;
                     }
                 }
             }
 
-            Print(minY, maxY, minX, maxX, clay, stillWater, springWater);
-            //Console.ReadKey();
+            foreach (var xy in stillWater)
+            {
+                minX = Math.Min(xy.x, minX);
+                maxX = Math.Max(xy.x, maxX);
+            }
+            foreach (var xy in springWater)
+            {
+                minX = Math.Min(xy.x, minX);
+                maxX = Math.Max(xy.x, maxX);
+            }
 
-            // 30488 to low
+            // var board = Print(minY, maxY, minX, maxX, clay, stillWater, springWater);
+
             return (stillWater.Count + springWater.Count).ToString();
         }
 
-        private void Print(int minY, int maxY, int minX, int maxX, HashSet<(int x, int y)> clay, HashSet<(int x, int y)> stillWater, HashSet<(int x, int y)> springWater)
+        private string Print(int minY, int maxY, int minX, int maxX, HashSet<(int x, int y)> clay, HashSet<(int x, int y)> stillWater, HashSet<(int x, int y)> springWater)
         {
+            var sb = new StringBuilder();
             for (int y = minY; y <= maxY; y++)
             {
                 for (int x = minX; x <= maxX; x++)
                 {
                     if (clay.Contains((x, y)))
-                        Console.Write("#");
+                        sb.Append("#");
                     else if (springWater.Contains((x, y)))
-                        Console.Write("|");
+                        sb.Append("|");
                     else if (stillWater.Contains((x, y)))
-                        Console.Write("~");
+                        sb.Append("~");
                     else
-                        Console.Write(".");
+                        sb.Append(".");
                 }
 
-                Console.WriteLine();
-                if (y % 100 == 99)
-                    Console.ReadKey();
+                sb.AppendLine();
             }
+
+            return sb.ToString();
         }
     }
 }
