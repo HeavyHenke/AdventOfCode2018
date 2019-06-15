@@ -22,8 +22,7 @@ namespace AoC2018
         }
     }
 
-
-    public class Day19
+    public class Day20
     {
         public string CalcA()
         {
