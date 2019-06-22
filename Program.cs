@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using MoreLinq;
 
 namespace AoC2018
@@ -12,7 +14,7 @@ namespace AoC2018
         static void Main()
         {
             DateTime start = DateTime.Now;
-            string result = new Day19().CalcA();
+            string result = new Day21().CalcA();
             DateTime stop = DateTime.Now;
 
             Console.WriteLine("It took " + (stop - start).TotalSeconds);
@@ -22,7 +24,7 @@ namespace AoC2018
         }
     }
 
-    public class Day20
+    class Day21
     {
         public string CalcA()
         {
@@ -30,3 +32,4 @@ namespace AoC2018
         }
     }
 }
+
