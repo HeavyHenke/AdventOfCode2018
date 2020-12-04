@@ -17,7 +17,7 @@ namespace AoC2018
         static void Main()
         {
             DateTime start = DateTime.Now;
-            string result = new Day22().CalcA();
+            string result = new Day21().CalcA();
             DateTime stop = DateTime.Now;
 
             Console.WriteLine("It took " + (stop - start).TotalSeconds);
@@ -94,18 +94,6 @@ namespace AoC2018
         }
     }
 
-    class Day21
-    {
-        public string CalcA()
-        {
-            var machine = new Machine("Day21.txt");
-
-            machine.Calc(212115);   // Max found thru debugging
-            return machine.NumInstructionsExecuted.ToString();
-        }
-    }
-
-
 
     public class Machine
     {
@@ -114,6 +102,9 @@ namespace AoC2018
         private readonly int _ipRegister;
 
         public int NumInstructionsExecuted { get; private set; }
+
+        public HashSet<int> _day21Hash = new HashSet<int>();
+        public int _lastDay21Val;
 
         public Machine(string programFileName)
         {
@@ -168,10 +159,17 @@ namespace AoC2018
 
             while (_registers[_ipRegister] >= 0 && _registers[_ipRegister] < _program.Count)
             {
-                //if (_registers[_ipRegister] == 13)
-                //    _registers[_ipRegister] = 28;
-                if (_registers[_ipRegister] == 8)
-                    ;
+                if (_registers[_ipRegister] == 28 && _registers[3] > 0)
+                {
+                    if(_day21Hash.Count % 100 == 0)
+                        Console.WriteLine(_day21Hash.Count);
+                    if (_day21Hash.Add(_registers[3]) == false)
+                    {
+                        return _lastDay21Val.ToString();
+                    }
+
+                    _lastDay21Val = _registers[3];
+                }
 
                 _program[_registers[_ipRegister]]();
                 _registers[_ipRegister]++;
