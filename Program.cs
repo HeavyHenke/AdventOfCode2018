@@ -17,80 +17,13 @@ namespace AoC2018
         static void Main()
         {
             DateTime start = DateTime.Now;
-            string result = new Day21().CalcA();
+            string result = new Day22().CalcB();
             DateTime stop = DateTime.Now;
 
             Console.WriteLine("It took " + (stop - start).TotalSeconds);
 
             Clipboard.SetText(result);
             Console.WriteLine(result);
-        }
-    }
-
-    class Day22
-    {
-        private int _targetX;
-        private int _targetY;
-        private int _depth;
-
-        public string CalcA()
-        {
-            //_depth = 510;
-            //(_targetX, _targetY) = (10, 10);
-            _depth = 6969;
-            (_targetX, _targetY) = (9, 796);
-
-            var totalRisk = 0;
-            for (int y = 0; y <= _targetY; y++)
-            {
-                for (int x = 0; x <= _targetX; x++)
-                {
-                    var risk = GetRisk(x, y);
-                    totalRisk += risk;
-                }
-            }
-
-            return totalRisk.ToString();
-        }
-
-
-        private byte GetRisk(int x, int y)
-        {
-            var hepp = (GetGeologicalIndex(x, y) + _depth) % 20183;
-            return (byte) (hepp % 3);
-        }
-
-        private readonly Dictionary<(int x, int y), long> _geoIndexes = new Dictionary<(int x, int y), long>();
-
-        private long GetGeologicalIndex(int x, int y)
-        {
-            if (x == 0 && y == 0)
-                return 0;
-            if (x == _targetX && y == _targetY)
-                return 0;
-            if (_geoIndexes.TryGetValue((x, y), out var geoIx))
-                return geoIx;
-
-            if (y == 0)
-            {
-                var ix = x * 16807L;
-                _geoIndexes[(x, y)] = ix;
-                return ix;
-            }
-
-            if (x == 0)
-            {
-                var ix = y * 48271L;
-                _geoIndexes[(x, y)] = ix;
-                return ix;
-            }
-
-            var ero1 = (GetGeologicalIndex(x - 1, y) + _depth) % 20183L;
-            var ero2 = (GetGeologicalIndex(x, y - 1) + _depth) % 20183L;
-            var geoIx2 = ero1 * ero2;
-            _geoIndexes[(x, y)] = geoIx2;
-
-            return geoIx2;
         }
     }
 
